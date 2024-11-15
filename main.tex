@@ -1,0 +1,497 @@
+\documentclass[12pt]{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[table]{xcolor}
+\usepackage{tcolorbox}
+\usepackage{hyperref} % For hyperlinks
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{fancyhdr}
+\usepackage{ragged2e}
+\usepackage{placeins}
+
+\pagestyle{fancy}
+\fancyhf{}  % Clear default header/footer
+
+% Customize header
+\fancyhead[L]{\textbf{Student Id: 23189644}}  % Left header: Student ID
+\fancyhead[R]{\includegraphics[width=1cm]{images.jpeg}}  % Right header: Logo (replace with your file)
+
+\fancyfoot[C]{\thepage}  % Footer: Centered page number
+
+% Ensure the header width matches the body text width
+\renewcommand{\headwidth}{\textwidth}  % Match header width to body text
+
+\begin{document}
+
+% First page content
+\begin{titlepage}
+    \centering
+    % Include the image
+    \includegraphics[width=0.4\textwidth]{images.jpeg} \\[1cm] % Adjust the width and path as necessary
+    
+    % Title
+    {\LARGE \textbf{Data Visualization Assessment}} \\[1cm]
+    
+    % Author information
+    \textbf{Sakshyam Kumar Acharya} \\
+    Student ID: 23189644 \\[0.5cm]
+    
+    Word Count: 4244 \\ 
+    Total Page Count: 22 \\[1cm]
+    
+    % Date
+    \textbf{July 2024}
+    
+\end{titlepage}
+
+
+
+
+\newpage % This will start a new page
+\tableofcontents % To generate table of contents
+\newpage
+\listoffigures % Generates the List of Figures
+\newpage
+
+
+\newpage 
+\begin{center}
+
+    \LARGE \textbf{Customer Churn Analysis 
+    in the Iranian Telecom Sector: A Data-Driven Approach}
+\end{center}
+
+\section{Introduction}
+
+\subsection{Iranian Churn}
+The Iranian Churn Dataset is a comprehensive collection of data from a telecom company in Iran, spanning over a period of 12 months. It contains detailed information about 3150 customers, each described by 13 distinct features. These features include metrics such as call failures, the number of customer complaints, subscription length, customer value, and demographic data like age group. The primary focus of the dataset is customer churn, which refers to whether a customer has discontinued the service after the observation period.
+
+Customer churn is a critical issue in the telecommunications industry as it directly impacts revenue and growth. Predictive analytics and machine learning techniques are increasingly used to understand and forecast churn behavior. By utilizing this dataset, companies can build models that identify customers at risk of leaving, allowing for timely interventions to retain them.
+
+The dataset is structured for use in classification tasks, particularly binary classification, where the target variable is churn (Yes or No). It serves as a valuable resource for research into customer retention strategies, especially in telecom markets with competitive pricing and similar service offerings.
+
+\subsection{Motivation behind the chosen domain}
+The motivation behind choosing the telecom industry as the domain for studying customer churn is rooted in the critical role customer retention plays in this sector. The telecom industry faces intense competition, with companies offering similar services at comparable prices, making customer loyalty essential for sustained profitability. Understanding and predicting churn is vital for telecom companies to optimize their marketing strategies, improve customer satisfaction, and reduce the financial impact of losing customers. With the rising importance of data-driven decision-making, analyzing customer churn through machine learning provides actionable insights, enabling companies to proactively identify at-risk customers and deploy targeted retention efforts.
+
+Furthermore, the availability of rich, real-time data from telecom services makes this domain ideal for leveraging advanced analytics techniques to develop predictive models that enhance customer retention strategies.
+
+\subsection{Scope of the visualizations}
+\textbf{The scope of visualizations for the Iranian Churn Dataset} will focus on several key aspects to better understand customer behavior and churn patterns in the telecom industry:
+
+\begin{itemize}
+    \item \textbf{Churn Rates Across Age Groups:} Visualizing the distribution of churn rates across different age groups to identify which demographics are more likely to leave the service.
+    \item \textbf{Call Failure and Churn Correlation:} Exploring the relationship between the number of call failures and churn, identifying how technical issues impact customer decisions.
+    \item \textbf{Geographical Distribution:} Examining churn rates by region or city to highlight any geographical trends in customer retention.
+    \item \textbf{Subscription Length:} Analyzing how the length of a customer's subscription impacts their likelihood of churning.
+    \item \textbf{Customer Complaints and Churn:} Investigating patterns between the number of complaints logged and subsequent churn to understand dissatisfaction levels.
+\end{itemize}
+
+\subsection{Dataset and Libraries Used}
+In our analysis, we utilized various R libraries to explore and visualize the customer churn data. Key libraries include tidyverse and readr for data wrangling and manipulation, ggplot2 for visualizing trends, and corrplot and ggcorrplot to study correlations between variables. We also employed naniar for managing missing data, and RColorBrewer and reshape2 to enhance our visualizations. The shiny package is used to create interactive web applications, allowing dynamic exploration of the churn dataset for better insights into customer behavior and retention strategies.
+
+
+\subsection{Aims and Objectives}
+This project involves analyzing the Iranian Churn Dataset, with the primary goal of identifying factors that influence customer churn in the telecom industry. Using various visualizations and data-driven techniques, we aim to uncover key insights, such as how call failures, customer complaints, and subscription lengths affect churn rates. Additionally, we examine correlations between variables like customer age groups and usage patterns, offering a comprehensive understanding of the challenges in customer retention and strategies to improve telecom services.
+
+\vspace{0.5cm}
+
+\textbf{Objective of the visualization:} The visualizations aim to answer the following questions:
+
+\begin{enumerate}
+    \item \textbf{Missing Data Patterns:}
+    
+    \begin{enumerate}
+        \item[a)] Are there any columns with significant missing or empty string values in the dataset, and how does this affect data integrity for churn prediction?
+    \end{enumerate}
+
+    \item \textbf{Call Failures and Complaints:}
+    
+    \begin{enumerate}
+        \item[a)] How do customer complaints correlate with the number of call failures, and what can this reveal about service quality issues?
+
+        \item[b)] What does the distribution of call failures by complaints indicate regarding customer dissatisfaction and potential churn risks?
+    \end{enumerate}
+
+    \item \textbf{Subscription Length and Age Groups:}
+    
+    \begin{enumerate}
+        \item[a)] How does the average subscription length vary across different age groups, and what trends can be identified regarding customer loyalty?
+
+        \item[b)] What role does age group play in determining the length of subscription, and how can this influence retention strategies?
+    \end{enumerate}
+
+    \item \textbf{Customer Status and Churn:}
+    
+    \begin{enumerate}
+        \item[a)] How does the distribution of customer status (active vs. non-active) impact overall churn rates, and what strategies can reduce churn among inactive users?
+
+        \item[b)] How does customer churn vary across different tariff plans, and what insights can be drawn regarding the impact of tariff plans on customer retention?
+    \end{enumerate}
+
+
+    \item \textbf{Scatter Plot of Call Failures vs. Customer Value:}
+    
+    \begin{enumerate}
+        \item[a)] What is the relationship between the number of call failures and customer value, and how can minimizing call failures improve retention among high-value customers?
+    \end{enumerate}
+
+    \item \textbf{Heatmap of Frequency of SMS vs. Distinct Called Numbers by Age Group:}
+    
+    \begin{enumerate}
+        \item[a)] How does the frequency of SMS usage correlate with the number of distinct called numbers across different age groups, and what does this indicate about customer communication preferences?
+    \end{enumerate}
+
+    \item \textbf{Violin Plot of Minutes of Use by Tariff Plan:}
+    
+    \begin{enumerate}
+        \item[a)] How do the minutes of use vary between different tariff plans, and what insights can be drawn regarding customer behavior under each plan?
+    \end{enumerate}
+
+    \item \textbf{Subscription Length by Churn Status:}
+    
+    \begin{enumerate}
+        \item[a)] How does the subscription length differ between churned and non-churned customers, and what patterns can help in predicting churn risk?
+    \end{enumerate}
+
+    \item \textbf{Proportion of Churn by Status:}
+    
+    \begin{enumerate}
+        \item[a)] How does customer churn vary based on active vs. non-active status, and what strategies can be employed to reduce churn among non-active customers?
+    \end{enumerate}
+
+    \item \textbf{Proportion of Complaints by Tariff Plan:}
+    
+    \begin{enumerate}
+        \item[a)] How do customer complaints vary across different tariff plans, and how can this information help in addressing service quality issues to improve customer satisfaction?
+    \end{enumerate}
+
+    \item \textbf{Correlation Matrix: Call Failures, Complaints, and Subscription Length:}
+    
+    \begin{enumerate}
+        \item[a)] What relationships exist between call failures, customer complaints, and subscription length, and how can this information be used to improve customer experience and reduce churn?
+    \end{enumerate}
+\end{enumerate}
+\end{enumerate}
+
+
+\newpage 
+
+
+\section{Data Exploration}
+
+\subsection{About the dataset}
+The dataset explores customer behavior in the telecom industry, with a focus on customer churn. Churn refers to the likelihood of customers leaving the service, and the dataset includes several key variables that can help predict this behavior. Each column provides valuable insights into customer interactions and service usage, which can be analyzed to develop retention strategies.
+
+\vspace{0.5cm}
+
+\textbf{Column Descriptions:}
+
+\begin{itemize}
+    \item \textbf{Call Failures:} The number of failed call attempts experienced by the customer, indicating potential service quality issues.
+    \item \textbf{Complains:} A binary indicator where 0 means no complaints were lodged, and 1 means the customer filed at least one complaint.
+    \item \textbf{Subscription Length:} Total duration (in months) that the customer has been subscribed to the telecom service.
+    \item \textbf{Charge Amount:} An ordinal scale (0 to 9) representing the billing amount, with 0 being the lowest and 9 the highest.
+    \item \textbf{Seconds of Use:} Total time spent on calls, measured in seconds, reflecting how frequently a customer uses the service.
+    \item \textbf{Frequency of Use:} The number of calls made by the customer, providing insights into usage patterns.
+    \item \textbf{Frequency of SMS:} The total number of SMS text messages sent by the customer.
+    \item \textbf{Distinct Called Numbers:} Number of unique phone numbers the customer has called, indicating the diversity of their communication.
+    \item \textbf{Age Group:} An ordinal attribute ranging from 1 (younger customers) to 5 (older customers).
+    \item \textbf{Tariff Plan:} A binary variable where 1 represents a Pay-as-you-go plan and 2 indicates a contractual plan.
+    \item \textbf{Status:} A binary status where 1 indicates an active customer and 2 denotes a non-active customer.
+    \item \textbf{Churn:} The target variable, where 1 represents customers who have churned (left the service) and 0 represents those who have stayed.
+    \item \textbf{Customer Value:} The calculated value of the customer to the business, based on their usage and payments.
+\end{itemize}
+
+
+\subsection{Missing Values}
+To check for missing values in the dataset, I first used R function     is.na() to identify any null entries in each column. After confirming the absence of missing values, I proceeded to visualize the results.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{1.png}  
+    \caption{Number of Empty Strings per Column}
+        \label{fig:example}
+   \vspace{0.5cm}
+     
+\justifying The graph clearly shows that none of the columns have any empty strings, as all points are at zero. This confirms that the dataset is clean with no missing string data ensuring reliable results for further analysis without requiring data imputation.
+\end{figure}
+
+\newpage
+
+
+\section{Feature Engineering}
+Feature engineering is a process that enhances datasets and allows for deeper analysis. It involves generating new variables or modifying existing ones to extract more meaningful insights. This process is crucial for capturing key patterns and relationships, preparing data for advanced analytics.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{15.png}  
+    \caption{Conversion of Seconds to Minutes in Customer Churn Data}
+        \label{fig:example}
+   \vspace{0.5cm}
+\end{figure}
+
+This figure shows the feature engineering step where the Seconds of Use column in the customer churn dataset was converted to Minutes of Use. The updated dataset is saved as \texttt{Customer\_Churn\_Updated.csv} with a preview displaying columns like frequency of SMS, distinct called numbers, and the new Minutes\_of\_Use field alongside others.
+\newpage
+
+\section{Data Visualization}
+
+\subsection{Answering the questions through data visualization}
+This section comprehensively addresses the objectives outlined above through the utilization of R language and the ggplot2 package with effective data visualization.
+
+\vspace{0.5cm}
+
+\textbf{Call Failures and Complaints} \\
+
+\textbf{1. How do customer complaints correlate with the number of call failures, and what can this reveal about service quality issues?}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{2.png}  
+    \caption{Distribution of Call Failures Based on Complaints}
+\end{figure}
+The boxplot illustrates the distribution of Call Failures between customers who did not complain (labeled as 0) and those who did complain (labeled as 1). The median value of call failures is slightly higher for customers who filed complaints, as shown by the position of the thick line in the middle of each box. However, the range of call failures is broader for customers who did not complain, with more outliers at the higher end of the scale. This suggests that while complaints tend to increase with call failures, many customers experiencing a high number of failures still chose not to complain. The plot shows a general overlap, indicating that call failures alone may not be the sole trigger for complaints.
+
+This analysis suggests that while call failures influence customer complaints, the relationship is not straightforward. Many customers endure service issues without lodging complaints, pointing to a gap in service perception and reporting that telecom companies need to bridge. Enhancing proactive service monitoring and customer outreach could mitigate these issues, leading to improved customer retention.
+\vspace{0.5cm}
+
+\textbf{2. What does the distribution of call failures by complaints indicate regarding customer dissatisfaction and potential churn risks?}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{9.png}  
+    \caption{Histogram Showing Distribution of Customer Call Failures Across Different Failure Counts}
+\end{figure}
+\FloatBarrier
+\subsection*{Figure 4: Histogram Showing Distribution of Customer Call Failures}
+This histogram details the frequency of call failures among customers, crucial for assessing service quality and potential churn risks. The x-axis categorizes the number of call failures, while the y-axis shows the number of customers affected at each level.
+
+\subsection*{Observations:}
+\begin{enumerate}
+    \item \textbf{Predominance of Low Failure Counts:}
+    \begin{itemize}
+        \item A significant majority of customers experience few to no call failures, indicating reliable service for most of the customer base.
+    \end{itemize}
+    
+    \item \textbf{Presence of a Long Tail for Higher Failures:}
+    \begin{itemize}
+        \item A long tail in the distribution suggests a smaller group of customers experience high call failures. This group is at a higher risk of dissatisfaction and potential churn.
+    \end{itemize}
+\end{enumerate}
+
+\subsection*{Strategic Implications:}
+\begin{enumerate}
+    \item \textbf{Proactive Customer Support:} Identifying and addressing the concerns of customers within the long tail can mitigate churn risks. Implementing targeted improvements for this group can enhance their service experience.
+    
+    \item \textbf{Continuous Monitoring:} The spread of call failures necessitates ongoing monitoring and swift response to emerging service issues to maintain customer satisfaction across all segments.
+\end{enumerate}
+
+This focused analysis helps in understanding the crucial areas of service improvement and customer retention strategy required to manage customer dissatisfaction effectively.
+
+\vspace{0.5cm}
+
+\textbf{Subscription Length and Age Groups}\\
+
+\textbf{1. How does the average subscription length vary across different age groups, and what trends can be identified regarding customer loyalty?}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.82\textwidth]{3.png}  
+    \caption{Average Subscription Length Across Age Groups}
+\end{figure}
+\FloatBarrier
+The x-axis of the bar chart represents the different Age Groups (labeled as 1, 2, 3, 4, and 5), while the y-axis shows the Mean Subscription Length, which is the average duration (in months or years) that customers from each age group have been subscribed to the service. Each bar corresponds to an age group, and the height of the bar reflects the average subscription duration for that group.
+
+The findings from the chart indicate that all age groups have a similar average subscription length, with values close to 30 units. There is no significant difference between age groups, suggesting that customer age does not have a strong impact on how long they remain subscribed to the service. This uniformity implies that the service is appealing across all age ranges, leading to comparable retention rates.
+
+Further investigation could also explore how factors such as customer support interactions and service plan types influence subscription length. Are customers who interact with support teams more likely to stay longer, regardless of age? How do different tariff plans affect loyalty across these age groups? By addressing these questions, the telecom provider could better tailor its offerings to promote long-term engagement and minimize churn.
+
+Finally, incorporating machine learning models to predict customer churn based on the available demographic, behavioral, and transactional data may provide actionable insights. Such models could help identify high-risk customers across all age groups, enabling timely interventions that could further reduce churn and enhance overall customer satisfaction.
+\vspace{0.5cm}
+
+\textbf{2. What role does age group play in determining the length of subscription, and how can this influence retention strategies?}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{5.png}  
+    \caption{Average Subscription Length Across Age Groups}
+\end{figure}
+\FloatBarrier
+The line graph titled "Minutes of Use by Age Group" illustrates the variation in service usage across five distinct age groups. The x-axis represents the age groups, while the y-axis shows the average minutes of use for each group. The graph reveals interesting patterns in how different age demographics engage with telecom services.
+
+In the first three age groups, usage remains relatively steady, starting around 70 minutes for Group 1, slightly increasing in Group 2, and then stabilizing in Group 3. However, in Group 4, there is a significant drop in average usage, indicating that customers in this bracket are less engaged with the service. This decline could suggest that this group has different usage preferences or needs, and targeting them with specific campaigns might improve engagement.
+
+A sharp spike is observed in Group 5, with average usage exceeding 90 minutes, making older customers the heaviest users of telecom services. This data highlights the importance of focusing on older demographics for retention, as they show a higher level of engagement. Tailored service packages or rewards for this group could strengthen their loyalty and improve customer satisfaction.
+
+\vspace{
+7cm}
+\textbf{Customer Status and Churn}\\
+
+\textbf{1. How does the distribution of customer status (active vs. non-active) impact overall churn rates, and what strategies can reduce churn among inactive users?}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{4.png}  
+    \caption{Distribution of Active vs. Non-Active Customer Status}
+\end{figure}
+\FloatBarrier
+The bar chart titled "Distribution of Customer Status" provides a visual breakdown of the customer base by their status. The x-axis represents two statuses: Status 1 (active customers) and Status 2 (non-active customers), while the y-axis shows the count of customers in each category. The green bar represents active customers, and the red bar represents non-active customers.
+
+The chart reveals that the majority of customers are active, with over 2,000 individuals in this category. In contrast, the non-active customer segment is significantly smaller, with less than 1,000 customers. This indicates that a large portion of the customer base is currently engaged and using the service, which is a positive indicator of customer retention.
+
+However, the non-active group, while smaller, still represents a notable segment that could be targeted for re-engagement. These customers might benefit from personalized offers or outreach efforts to bring them back to active usage. Understanding why these customers have become inactive could provide valuable insights for improving service or customer support, reducing churn, and boosting overall satisfaction.
+\vspace{0.5cm}
+
+
+\textbf{2. How does customer churn vary across different tariff plans, and what insights can be drawn regarding the impact of tariff plans on customer retention?}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{8.png}  
+    \caption{Proportion of Churn by Tariff Plan}
+\end{figure}
+\FloatBarrier
+The Stacked Bar Chart visualizes the proportion of Churn across different Tariff Plans, with the x-axis representing the Tariff Plan and the y-axis showing the proportion of customers (normalized to 100 percent) who either churned (1 for churn) or did not churn (0 for no churn). Each bar is filled according to the Churn status, where light red represents customers who have churned and light blue represents those who have remained with the service. This allows for an easy comparison of how each tariff plan performs in terms of customer retention.
+
+By observing the height of the red segments in each bar, we can identify which tariff plans have a higher proportion of churned customers. Plans with larger red sections indicate higher churn rates, suggesting these plans may require further investigation or improvement to reduce churn. The chart provides valuable insights for targeted retention strategies, highlighting which tariff plans are at higher risk for losing customers.
+\vspace{0.5cm}
+
+\textbf{1. What is the relationship between the number of call failures and customer value, and how can minimizing call failures improve retention among high-value customers?}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{6.png}  
+    \caption{Scatter Plot of Call Failures vs. Customer Value}
+\end{figure}
+\FloatBarrier
+The scatter plot titled "Scatter Plot of Call Failures vs. Customer Value" demonstrates the relationship between the number of call failures and customer value. The x-axis represents the number of call failures experienced by customers, while the y-axis reflects their value to the business. Each dot on the plot represents a customer, mapping their service disruptions against their overall contribution.
+
+The plot shows a high concentration of customers with low call failures, particularly between 0 and 5 failures, spread across all customer values. This indicates that most customers, including high-value ones, experience minimal service issues. However, as the number of call failures increases, the density of data points becomes sparser, particularly after 10 failures. Although some high-value customers still experience higher call failures, they are fewer in number.
+
+This distribution suggests that call failures, while not always leading to customer dissatisfaction, could pose a risk for higher-value customers experiencing more frequent disruptions. Telecom companies should focus on identifying these at-risk high-value customers and proactively addressing their service concerns to improve satisfaction and reduce the risk of churn.
+
+
+\vspace{0.5cm}
+\textbf{1. How does the frequency of SMS usage correlate with the number of distinct called numbers across different age groups, and what does this indicate about customer communication preferences?}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{14.png}  
+    \caption{Heatmap of Frequency of SMS vs. Distinct Called Numbers by Age
+Group}
+\end{figure}
+\FloatBarrier
+The correlation matrix is a tool used to analyze the relationships between Call Failures, Complains, and Subscription Length. It shows a weak positive correlation between Call Failures and Complains (0.15), suggesting that customers with more call failures are slightly more likely to file complaints. A weak positive correlation also exists between Call Failures and Subscription Length (0.17), suggesting that customers with longer subscription periods experience slightly more call failures.
+
+A very weak negative correlation exists between Complains and Subscription Length (-0.02), suggesting that there is almost no relationship between the number of complaints and the length of a customer's subscription. The matrix also shows that each variable is perfectly correlated with itself.
+
+Overall, the relationship between Call Failures and Complains is moderately related, while Complains and Subscription Length have almost no correlation.
+
+\vspace{0.5cm}
+\textbf{1. How do the minutes of use vary between different tariff plans, and what insights can be drawn regarding customer behavior under each plan?}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{10.png}  
+    \caption{Violin Plot of Minutes of Use by Tariff Plan}
+\end{figure}
+\FloatBarrier
+The x-axis shows different Tariff Plans available to customers, while the y-axis shows the distribution of Minutes of Use for each plan. The violin plot indicates the density of data, with wider sections indicating more customers using a certain amount of minutes. This helps identify how different tariff plans cater to varying usage behaviors, revealing whether specific plans are associated with heavy or light usage.
+
+\vspace{0.5cm}
+\textbf{1. How does the subscription length differ between churned and non-churned customers, and what patterns can help in predicting churn risk?}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{11.png}  
+    \caption{Subscription Length by Churn Status}
+\end{figure}
+\FloatBarrier
+The Box Plot displays the distribution of subscription lengths for both churned and non-churned customers, with each box representing the interquartile range (IQR) where 50\% of data falls. The "whiskers" indicate the range of data, while any points outside this range are potential outliers.
+
+The data suggests that churned customers tend to leave the service earlier due to dissatisfaction or lack of value. Non-churned customers may have a wider or higher distribution of subscription lengths, indicating longer retention. Outliers in the churned group with longer subscription lengths may represent customers who stayed longer but eventually left due to dissatisfaction or changing needs.
+
+Churned customers with shorter subscription lengths may indicate a need for business improvement or longer commitment incentives. A large gap between churned and non-churned groups suggests churn is more common among short-term users. A similar distribution may suggest other factors are driving churn.
+
+\vspace{0.5cm}
+\textbf{1. How does customer churn vary based on active vs. non-active status, and what strategies can be employed to reduce churn among non-active customers?}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{12.png}  
+    \caption{Proportion of Churn by Status}
+\end{figure}
+\FloatBarrier
+The bar chart titled "Proportion of Churn by Status" illustrates the proportion of customers who have churned (in red) versus those who have not churned (in blue) based on their status. The x-axis represents two customer statuses: Status 1 (Active) and Status 2 (Non-active), while the y-axis displays the proportion of customers in each category.
+
+The left bar represents active customers, with the overwhelming majority of this group (shown in blue) not churning. Only a very small proportion (in red) has churned, indicating strong customer retention among active users.
+
+The right bar shows a significantly different distribution for non-active customers. A much larger proportion of this group has churned (shown in red), while fewer have remained with the service (shown in blue). This suggests that non-active customers are far more likely to leave the service compared to active ones.
+
+The chart clearly indicates that non-active customers are at a much higher risk of churning. This insight suggests that efforts to re-engage non-active customers could be crucial in reducing overall churn rates. Proactive measures, such as targeted offers or reactivation campaigns, may help retain more customers from this vulnerable segment, ultimately improving customer retention rates across the board.
+
+\vspace{0.5cm}
+\textbf{1. How do customer complaints vary across different tariff plans, and how can this information help in addressing service quality issues to improve customer satisfaction?}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{13.png}  
+    \caption{Proportion of Complaints by Tariff Plan}
+\end{figure}
+\FloatBarrier
+The bar chart titled "Proportion of Complaints by Tariff Plan" shows the distribution of customer complaints across two different tariff plans. In both plans, the majority of customers have not lodged complaints, as represented by the large red portions of each bar. This suggests that most customers are either satisfied with their service or have chosen not to formally complain, regardless of their tariff plan. The small blue sections at the bottom of each bar represent the minority of customers who did lodge complaints, and this proportion remains consistent between the two plans. This indicates that there is no significant difference in complaint frequency between Tariff Plan 1 and Tariff Plan 2, suggesting that the complaints are likely driven by factors other than the specific tariff plans themselves. Issues such as service quality or external factors might be contributing to the dissatisfaction of this small group of customers. Therefore, telecom providers may benefit from investigating these common complaints to improve overall service and reduce customer dissatisfaction.
+
+\vspace{0.5cm}
+\textbf{1. What relationships exist between call failures, customer complaints, and subscription length, and how can this information be used to improve customer experience and reduce churn?}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{7.png}  
+    \caption{Correlation Matrix: Call Failures, Complaints, and Subscription Length}
+\end{figure}
+\FloatBarrier
+The heatmap visualizes the interaction between the Frequency of SMS (x-axis) and the Distinct Called Numbers (y-axis) across different Age Groups. The x-axis represents the average number of SMS messages sent, while the y-axis shows the average number of unique phone numbers called. Each tile on the heatmap corresponds to an age group, with the color intensity indicating the age group’s activity level in terms of these two variables. Darker or brighter colors highlight age groups that have higher values for both Frequency of SMS and Distinct Called Numbers, indicating more active communication behaviors. This heatmap helps identify communication trends across different age groups, revealing which groups engage more actively through both SMS and phone calls. The relationship between these two metrics can also help inform targeted communication strategies for different demographics.
+
+
+
+\section{Summary}
+This report analyzed customer churn in the Iranian telecom sector using a comprehensive dataset containing information on 3150 customers over a 12-month period. Employing various R libraries and visualization techniques, the analysis focused on identifying factors that contribute to customer churn, including call failures, complaint patterns, subscription lengths, and demographic variables.
+
+\vspace{0.5cm}
+Key findings from the analysis include:
+
+\begin{itemize}
+    \item \textbf{Call Failures and Churn:} A higher number of call failures was associated with increased churn, suggesting that service quality directly impacts customer retention.
+    
+    \item \textbf{Complaints and Service Quality:} There was a correlation between the number of complaints and churn, with customers who filed complaints more likely to churn, highlighting the importance of addressing service quality issues promptly.
+    
+    \item \textbf{Demographic Influence:} Churn rates varied significantly across different age groups, indicating that age-specific marketing and service strategies could be beneficial.
+    
+    \item \textbf{Tariff Plan Impact:} Different tariff plans exhibited varying levels of churn, suggesting that plan features and pricing structures significantly influence customer loyalty.
+\end{itemize}
+
+These insights have been pivotal in understanding the complexities of customer behavior and churn in a competitive telecom market.
+
+
+\section{Future Work}
+
+As we continue to evolve our understanding of customer churn in the telecom sector, our future efforts will focus on several strategic enhancements to refine and expand our current analysis capabilities. These improvements are critical for staying ahead in a highly competitive industry where customer retention is pivotal to business success.
+
+\begin{enumerate}
+    \item \textbf{Expansion of Dataset:} We plan to augment our dataset by incorporating additional variables that capture more dimensions of customer interactions and service usage. This will include data on customer service interactions, network performance metrics, and perhaps social media sentiment analysis to gain a broader perspective on customer satisfaction and potential churn triggers \cite{han2011}. Enriching our dataset will allow for a more nuanced analysis and potentially uncover new patterns that were not previously observable.
+    
+    \item \textbf{Enhanced Analytical Techniques:} To improve our predictive accuracy and insight generation, we will explore advanced machine learning algorithms such as ensemble methods \cite{zhou2012} and deep learning \cite{goodfellow2016}. These techniques offer the potential for higher precision in modeling complex behaviors and can adapt more effectively to new data trends compared to traditional models.
+    
+    \item \textbf{Interactive Visualizations:} Developing interactive dashboards using platforms such as R Shiny \cite{chang2020} will enable stakeholders to explore data dynamically. This approach not only makes our findings more accessible but also allows users to customize analyses according to specific preferences, thereby providing tailored insights that can drive decision-making in real-time.
+    
+    \item \textbf{Real-Time Analytics Implementation:} Implementing a real-time analytics framework is another critical step. This framework will process data as it is generated, providing immediate insights into customer behavior and churn risks. Such timely information could empower agile responses and informed decision-making that is crucial for proactive customer retention strategies.
+    
+    \item \textbf{Integration with Business Processes:} Integrating our analytical models directly into business processes is essential for operational efficiency. By automating certain decision processes based on predictive insights, telecom companies can implement swift interventions to improve customer satisfaction and reduce churn. This might include personalized customer engagement campaigns or dynamic pricing models that respond to individual customer risk profiles.
+\end{enumerate}
+
+
+\section{Conclusion}
+The analysis conducted provides telecom companies with a deeper understanding of the factors influencing customer churn, offering a data-driven foundation for developing effective retention strategies. However, as customer behavior and market dynamics evolve, continuous improvements in data collection, analysis techniques, and integration with business processes are essential. Future work will focus on expanding the dataset, integrating more sophisticated analytical models, developing real-time analytics, and employing interactive visualizations to enhance decision-making processes. By advancing these areas, telecom companies can not only anticipate customer needs more effectively but also enhance their competitive edge by maintaining a more stable and satisfied customer base.
+
+
+\begin{thebibliography}{9}
+
+\bibitem{chang2020} 
+Chang, W., Cheng, J., Allaire, J. J., Xie, Y., \& McPherson, J. (2020). Shiny: Web Application Framework for R. R package version 1.5.0.
+
+\bibitem{goodfellow2016} 
+Goodfellow, I., Bengio, Y., \& Courville, A. (2016). \textit{Deep Learning}. MIT Press.
+
+\bibitem{han2011} 
+Han, J., Pei, J., \& Kamber, M. (2011). \textit{Data Mining: Concepts and Techniques}. Morgan Kaufmann.
+
+\bibitem{zhou2012} 
+Zhou, Z.-H. (2012). \textit{Ensemble Methods: Foundations and Algorithms}. CRC Press.
+
+\end{thebibliography}
+\end{document}

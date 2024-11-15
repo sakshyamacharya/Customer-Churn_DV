@@ -1,0 +1,220 @@
+```{r}
+library(tidyverse)
+library(readr)
+library(ggplot2)
+library(corrplot)
+library(naniar)
+library(RColorBrewer)
+library(reshape2)
+library(gridExtra)
+library(ggcorrplot)
+library(shiny)
+
+```
+```{r}
+churn_data <- read_csv("Customer Churn.csv")
+head(churn_data)
+
+```
+```{r}
+str(churn_data)
+glimpse(churn_data)
+summary(churn_data)
+sum(is.na(churn_data))
+colnames(churn_data)
+
+```
+```{r}
+count_empty_strings <- function(x) {
+  sum(is.na(x) | x == "")
+}
+missing_values <- data.frame(
+  Columns = colnames(churn_data),
+  Count_Empty_Strings = sapply(churn_data, count_empty_strings)
+)
+
+ggplot(missing_values, aes(x = Columns, y = Count_Empty_Strings)) +
+  geom_point(size = 4) +  
+  theme_minimal() +  
+  labs(title = "Number of Empty Strings per Column", 
+       x = "Columns", 
+       y = "Count of Empty Strings") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+
+```
+```{r}
+df <- read.csv("Customer Churn.csv", check.names = FALSE)
+view(df)
+colnames(df) <- gsub(" ", "_", colnames(df))
+print(colnames(df))
+view(df)
+
+```
+```{r}
+ggplot(df, aes(x = factor(Complains), y = Call__Failure)) +
+  geom_boxplot(fill = "lightblue") +
+  labs(x = "Complains", y = "Call Failures", title = "Distribution of Call Failures based on Complaints") +
+  theme_minimal()
+
+```
+```{r}
+age_group_summary <- df %>%
+  group_by(Age_Group) %>%
+  summarise(
+    Mean_Subscription_Length = mean(Subscription__Length, na.rm = TRUE),
+    Median_Subscription_Length = median(Subscription__Length, na.rm = TRUE),
+    Count = n()
+  )
+print(age_group_summary)
+
+```
+
+```{r}
+ggplot(age_group_summary, aes(x = Age_Group, y = Mean_Subscription_Length, fill = factor(Age_Group))) +
+  geom_bar(stat = "identity") +
+  scale_fill_brewer(palette = "Blues") +  
+  labs(x = "Age Group", y = "Mean Subscription Length", 
+       title = "Mean Subscription Length by Age Group") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme_minimal()
+
+```
+
+```{r}
+ggplot(df, aes(x = factor(Status), fill = factor(Status))) +
+  geom_bar() +
+  scale_fill_manual(values = c("1" = "lightgreen", "2" = "lightcoral")) +  
+  labs(x = "Status", y = "Count", 
+       title = "Distribution of Customer Status") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme_minimal()
+
+```
+```{r}
+df <- read.csv("Customer Churn.csv", check.names = FALSE)
+df$Minutes_of_Use <- df$`Seconds of Use` / 60
+write.csv(df, "Customer_Churn_Updated.csv", row.names = FALSE)
+head(df)
+
+```
+
+```{r}
+age_group_usage <- df %>%
+  group_by(`Age Group`) %>%
+  summarise(Mean_Minutes_of_Use = mean(Minutes_of_Use, na.rm = TRUE))
+
+ggplot(age_group_usage, aes(x = `Age Group`, y = Mean_Minutes_of_Use, group = 1)) +
+  geom_line(color = "blue", size = 1.2) +
+  geom_point(color = "darkblue", size = 3) +  
+  labs(x = "Age Group", y = "Minutes of Use", 
+       title = "Minutes of Use by Age Group") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme_minimal()
+
+```
+
+```{r}
+colnames(df)
+
+```
+```{r}
+ggplot(df, aes(x = `Call  Failure`, y = `Customer Value`)) +
+  geom_point(color = "blue", alpha = 0.6) +  
+  labs(x = "Call Failures", y = "Customer Value", 
+       title = "Scatter Plot of Call Failures vs. Customer Value") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme_minimal()
+
+```
+
+```{r}
+heatmap_data <- df %>%
+  group_by(`Age Group`) %>%
+  summarise(
+    Avg_Frequency_of_SMS = mean(`Frequency of SMS`, na.rm = TRUE),
+    Avg_Distinct_Called_Numbers = mean(`Distinct Called Numbers`, na.rm = TRUE)
+  )
+
+ggplot(heatmap_data, aes(x = Avg_Frequency_of_SMS, y = Avg_Distinct_Called_Numbers, fill = `Age Group`)) +
+  geom_tile(color = "white") +  
+  labs(x = "Average Frequency of SMS", y = "Average Distinct Called Numbers", 
+       title = "Heatmap of Frequency of SMS vs. Distinct Called Numbers by Age Group") +
+  theme_minimal()
+
+```
+
+```{r}
+ggplot(df, aes(x = `Tariff Plan`, fill = factor(Churn))) +
+  geom_bar(position = "fill") +  
+  labs(x = "Tariff Plan", y = "Proportion", fill = "Churn",
+       title = "Proportion of Churn by Tariff Plan") +
+  scale_fill_manual(values = c("lightblue", "lightcoral")) +  
+  theme_minimal()
+
+```
+
+```{r}
+ggplot(df, aes(x = `Call  Failure`)) +
+  geom_histogram(binwidth = 1, fill = "skyblue", color = "black") +
+  labs(x = "Number of Call Failures", y = "Count of Customers", 
+       title = "Histogram of Call Failures") +
+  theme_minimal()
+
+```
+
+```{r}
+ggplot(df, aes(x = `Tariff Plan`, y = Minutes_of_Use, fill = factor(`Tariff Plan`))) +
+  geom_violin() +
+  labs(x = "Tariff Plan", y = "Minutes of Use", 
+       title = "Violin Plot of Minutes of Use by Tariff Plan") +
+  theme_minimal()
+
+```
+
+```{r}
+ggplot(df, aes(x = factor(Churn), y = `Subscription  Length`, fill = factor(Churn))) +
+  geom_boxplot() +
+  labs(x = "Churn (0 = No, 1 = Yes)", y = "Subscription Length", 
+       title = "Subscription Length by Churn Status", 
+       fill = "Churn") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+```{r}
+ggplot(df, aes(x = factor(Status), fill = factor(Churn))) +
+  geom_bar(position = "fill") +  
+  labs(x = "Status (1 = Active, 2 = Non-active)", y = "Proportion", fill = "Churn",
+       title = "Proportion of Churn by Status") +
+  scale_fill_manual(values = c("lightblue", "lightcoral"), labels = c("No Churn", "Churn")) +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme_minimal()
+
+```
+
+```{r}
+ggplot(df, aes(x = factor(`Tariff Plan`), fill = factor(Complains))) +
+  geom_bar(position = "fill") +  
+  labs(x = "Tariff Plan", y = "Proportion of Complaints", fill = "Complaints",
+       title = "Proportion of Complaints by Tariff Plan") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_fill_manual(values = c("lightblue", "lightcoral"), labels = c("No Complaint", "Complaint")) +
+  theme_minimal()
+
+```
+
+```{r}
+cor_data <- df %>%
+  select(`Call  Failure`, Complains, `Subscription  Length`)
+
+cor_matrix <- cor(cor_data, use = "complete.obs")
+
+ggcorrplot(cor_matrix, lab = TRUE, lab_size = 3, 
+           title = "Correlation Matrix: Call Failures, Complains, and Subscription Length",
+           colors = c("#6D9EC1", "white", "#E46726"),  
+           outline.color = "white") +  
+  theme_minimal() + 
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
